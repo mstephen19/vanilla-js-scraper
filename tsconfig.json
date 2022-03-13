@@ -1,0 +1,16 @@
+{
+    "extends": "@apify/tsconfig",
+    "compilerOptions": {
+        "incremental": false,
+        "target": "esnext",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "strict": true,
+        "noImplicitAny": false,
+        "strictNullChecks": false,
+        "removeComments": true,
+        "skipLibCheck": true,
+        "outDir": "dist"
+    },
+    "include": ["./src/**/*"]
+}

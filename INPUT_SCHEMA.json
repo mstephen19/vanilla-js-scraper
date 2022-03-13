@@ -1,0 +1,64 @@
+{
+    "title": "Input schema for the Vanilla JS Scraper actor.",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "requests": {
+            "title": "Requests",
+            "type": "array",
+            "description": "A static list of URLs to scrape. <br><br>For details, see the <a href='https://apify.com/apify/cheerio-scraper#start-urls' target='_blank' rel='noopener'>Start URLs</a> section in the README.",
+            "prefill": [{ "url": "https://apify.com" }],
+            "editor": "requestListSources"
+        },
+        "pseudoUrls": {
+            "title": "Pseudo-URLs",
+            "type": "array",
+            "description": "Specifies what kind of URLs found by the <b>Link selector</b> should be added to the request queue. A pseudo-URL is a URL with <b>regular expressions</b> enclosed in <code>[]</code> brackets, e.g. <code>http://www.example.com/[.*]</code>. <br><br>If <b>Pseudo-URLs</b> are omitted, the actor enqueues all links matched by the <b>Link selector</b>.<br><br>For details, see <a href='https://apify.com/apify/cheerio-scraper#pseudo-urls' target='_blank' rel='noopener'>Pseudo-URLs</a> in README.",
+            "editor": "pseudoUrls",
+            "default": [],
+            "prefill": [
+                {
+                    "purl": "https://apify.com[(/[\\w-]+)?]"
+                }
+            ]
+        },
+        "linkSelector": {
+            "title": "Link selector",
+            "type": "string",
+            "description": "A CSS selector stating which links on the page (<code>&lt;a&gt;</code> elements with <code>href</code> attribute) shall be followed and added to the request queue. To filter the links added to the queue, use the <b>Pseudo-URLs</b> field.<br><br>If the <b>Link selector</b> is empty, the page links are ignored.<br><br>For details, see the <a href='https://apify.com/apify/cheerio-scraper#link-selector' target='_blank' rel='noopener'>Link selector</a> in README.",
+            "editor": "textfield",
+            "prefill": "a[href]"
+        },
+        "pageFunction": {
+            "title": "Page function",
+            "type": "string",
+            "description": "A JavaScript function that is executed for every page loaded server-side in Node.js 12. Use it to scrape data from the page, perform actions or add new URLs to the request queue.<br><br>For details, see <a href='https://apify.com/apify/cheerio-scraper#page-function' target='_blank' rel='noopener'>Page function</a> in README.",
+            "prefill": "async function pageFunction(context) {\n    const { window, document, crawler, enqueueRequest, request, response, userData, json } = context;\n\n    const title = document.querySelector('title').textContent\n\n    const responseHeaders = response.headers\n\n    return {\n        title,\n        responseHeaders\n    };\n}",
+            "editor": "javascript"
+        },
+        "preNavigationHooks": {
+            "title": "Pre-navigation hooks",
+            "type": "string",
+            "description": "Async functions that are sequentially evaluated before the navigation. Good for setting additional cookies or browser properties before navigation. The function accepts two parameters, `crawlingContext` and `requestAsBrowserOptions`, which are passed to the `requestAsBrowser()` function the crawler calls to navigate.",
+            "prefill": "// We need to return array of (possibly async) functions here.\n// The functions accept two arguments: the \"crawlingContext\" object\n// and \"requestAsBrowserOptions\" which are passed to the `requestAsBrowser()`\n// function the crawler calls to navigate..\n[\n    async (crawlingContext, requestAsBrowserOptions) => {\n        // ...\n    }\n]",
+            "editor": "javascript"
+        },
+        "postNavigationHooks": {
+            "title": "Post-navigation hooks",
+            "type": "string",
+            "description": "Async functions that are sequentially evaluated after the navigation. Good for checking if the navigation was successful. The function accepts `crawlingContext` as the only parameter.",
+            "prefill": "// We need to return array of (possibly async) functions here.\n// The functions accept a single argument: the \"crawlingContext\" object.\n[\n    async (crawlingContext) => {\n        // ...\n    },\n]",
+            "editor": "javascript"
+        },
+        "proxy": {
+            "sectionCaption": "Proxy and HTTP configuration",
+            "title": "Proxy configuration",
+            "type": "object",
+            "description": "Specifies proxy servers that will be used by the scraper in order to hide its origin.<br><br>For details, see <a href='https://apify.com/apify/cheerio-scraper#proxy-configuration' target='_blank' rel='noopener'>Proxy configuration</a> in README.",
+            "prefill": { "useApifyProxy": true },
+            "default": { "useApifyProxy": false },
+            "editor": "proxy"
+        }
+    },
+    "required": []
+}
