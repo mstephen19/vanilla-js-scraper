@@ -1,5 +1,6 @@
 import { Hook, ProxyConfigurationOptions, CheerioCrawler, QueueOperationInfo, RequestOptions, Request } from 'apify';
 import { DOMWindow } from 'jsdom';
+import KVStore from './KVStore';
 
 export type PageFunction = <T extends Record<string, unknown>>(context: PageFunctionContext) => Promise<T>;
 
@@ -13,6 +14,9 @@ export interface Schema {
     linkSelector?: string;
     pseudoUrls?: string[];
     proxy?: ProxyConfigurationOptions;
+    debug: boolean;
+    datasetName?: string;
+    keyValueStoreName?: string;
 }
 
 export interface PageFunctionContext {
@@ -24,4 +28,5 @@ export interface PageFunctionContext {
     response: unknown;
     userData: Record<string, unknown>;
     json: Record<string, unknown> | undefined;
+    kvStore: KVStore;
 }

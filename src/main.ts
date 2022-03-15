@@ -1,8 +1,9 @@
-import Apify, { RequestOptions } from 'apify';
+import Apify, { Dataset, RequestOptions } from 'apify';
 import { JSDOM } from 'jsdom';
 import { VM } from 'vm2';
 
 import { Schema, PageFunction, Hooks, PageFunctionContext } from './types';
+import KVStore from './KVStore';
 
 const vm2 = new VM();
 
@@ -17,13 +18,26 @@ Apify.main(async () => {
         linkSelector,
         pseudoUrls,
         proxy,
+        debug,
+        datasetName,
+        keyValueStoreName,
     } = (await Apify.getInput()) as Schema;
+
+    if (debug) log.setLevel(log.LEVELS.DEBUG);
+
+    let dataset: Dataset;
+
+    if (datasetName) dataset = await Apify.openDataset(datasetName);
+
+    const kvStore = new KVStore(keyValueStoreName);
+    await kvStore.initialize();
 
     let vmPageFunction: any;
     let preNavigationHooks: Hooks;
     let postNavigationHooks: Hooks;
 
     try {
+        log.debug('Evaluating provided code...');
         vmPageFunction = vm2.run(`() => ${stringFunction}`);
         preNavigationHooks = vm2.run(stringPreNav) as Hooks;
         postNavigationHooks = vm2.run(stringPostNav) as Hooks;
@@ -43,6 +57,7 @@ Apify.main(async () => {
         proxyConfiguration,
         preNavigationHooks: [...preNavigationHooks],
         handlePageFunction: async ({ $, body, request, response, crawler: crawlerParam, json }) => {
+            log.debug(`Running request for ${request.url}`);
             const { requestQueue: crawlerRq } = crawlerParam;
             const { userData } = request;
 
@@ -67,8 +82,10 @@ Apify.main(async () => {
                     userData,
                     json,
                     response,
+                    kvStore,
                 };
 
+                log.debug('Running custom pageFunction...');
                 result = await pageFunction(context);
 
                 if (!result) throw new Error('Must return an object from the pageFunction!');
@@ -86,6 +103,11 @@ Apify.main(async () => {
                 log.error(`pageFunction failed with error: ${err}`);
             }
 
+            if (dataset) {
+                log.debug(`Pushing data to the dataset with name ${datasetName}...`);
+                return dataset.pushData({ page: request.url, ...result });
+            }
+            log.debug('Pushing data to the default dataset...');
             return Apify.pushData({ page: request.url, ...result });
         },
         postNavigationHooks: [...postNavigationHooks],

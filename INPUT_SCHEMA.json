@@ -58,6 +58,26 @@
             "prefill": { "useApifyProxy": true },
             "default": { "useApifyProxy": false },
             "editor": "proxy"
+        },
+        "debug": {
+            "sectionCaption": "Advanced configuration",
+            "title": "Debug log",
+            "description": "Include debug messages in the log?",
+            "type": "boolean",
+            "default": false,
+            "editor": "checkbox"
+        },
+        "datasetName": {
+            "title": "Dataset name",
+            "type": "string",
+            "description": "Name or ID of the dataset that will be used for storing results. If left empty, the default dataset of the run will be used.",
+            "editor": "textfield"
+        },
+        "keyValueStoreName": {
+            "title": "Key-value store name",
+            "type": "string",
+            "description": "Name or ID of the key-value store that will be used for storing records. If left empty, the default key-value store of the run will be used.",
+            "editor": "textfield"
         }
     },
     "required": []
