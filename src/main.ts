@@ -97,6 +97,7 @@ Apify.main(async () => {
                     response,
                     kvStore,
                     customData,
+                    body,
                 };
 
                 log.debug('Running custom pageFunction...');

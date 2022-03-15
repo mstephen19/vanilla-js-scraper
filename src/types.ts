@@ -37,4 +37,5 @@ export interface PageFunctionContext {
     json: Record<string, unknown> | undefined;
     kvStore: KVStore;
     customData: Record<string, unknown>
+    body: string | Buffer
 }
