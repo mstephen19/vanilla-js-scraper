@@ -178,9 +178,18 @@ Additionally, it is not recommended to delete the function declaration from the 
 
 -   ##### **`window: Object`**
 
+    This is not a fully-fledged window object, but supports many of the methods you already know, such as:
+
+    ```JavaScript
+    window.contentType
+    window.location
+    ```
+
 -   ##### **`document: Object`**
 
     This object is the starting point for traversing the DOM and extracting data from it. It supports the same methods you are likely already familiar with.
+
+    > Note: You **CANNOT** manipulate the DOM with this document object. It simply will not work.
 
     Example:
 
