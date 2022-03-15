@@ -21,6 +21,13 @@ Apify.main(async () => {
         debug,
         datasetName,
         keyValueStoreName,
+        maxRequestRetries,
+        ignoreSslErrors,
+        additionalMimeTypes,
+        maxConcurrency,
+        pageLoadTimeoutSecs,
+        pageFunctionTimeoutSecs,
+        customData,
     } = (await Apify.getInput()) as Schema;
 
     if (debug) log.setLevel(log.LEVELS.DEBUG);
@@ -32,7 +39,7 @@ Apify.main(async () => {
     const kvStore = new KVStore(keyValueStoreName);
     await kvStore.initialize();
 
-    let vmPageFunction: any;
+    let vmPageFunction;
     let preNavigationHooks: Hooks;
     let postNavigationHooks: Hooks;
 
@@ -55,6 +62,12 @@ Apify.main(async () => {
         requestList,
         requestQueue,
         proxyConfiguration,
+        maxRequestRetries,
+        ignoreSslErrors,
+        additionalMimeTypes,
+        maxConcurrency,
+        requestTimeoutSecs: pageLoadTimeoutSecs,
+        handlePageTimeoutSecs: pageFunctionTimeoutSecs,
         preNavigationHooks: [...preNavigationHooks],
         handlePageFunction: async ({ $, body, request, response, crawler: crawlerParam, json }) => {
             log.debug(`Running request for ${request.url}`);
@@ -70,7 +83,7 @@ Apify.main(async () => {
                 return crawlerRq.addRequest(req as RequestOptions);
             };
 
-            let result: Record<string, unknown>;
+            let result: Record<string, unknown> = null;
 
             try {
                 const context: PageFunctionContext = {
@@ -83,6 +96,7 @@ Apify.main(async () => {
                     json,
                     response,
                     kvStore,
+                    customData,
                 };
 
                 log.debug('Running custom pageFunction...');

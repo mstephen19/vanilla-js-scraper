@@ -17,6 +17,13 @@ export interface Schema {
     debug: boolean;
     datasetName?: string;
     keyValueStoreName?: string;
+    maxRequestRetries: number;
+    ignoreSslErrors: boolean;
+    additionalMimeTypes: string[];
+    maxConcurrency: number;
+    pageLoadTimeoutSecs: number;
+    pageFunctionTimeoutSecs: number;
+    customData: Record<string, unknown>;
 }
 
 export interface PageFunctionContext {
@@ -29,4 +36,5 @@ export interface PageFunctionContext {
     userData: Record<string, unknown>;
     json: Record<string, unknown> | undefined;
     kvStore: KVStore;
+    customData: Record<string, unknown>
 }

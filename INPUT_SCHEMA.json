@@ -67,6 +67,51 @@
             "default": false,
             "editor": "checkbox"
         },
+        "maxConcurrency": {
+            "title": "Max concurrency",
+            "type": "integer",
+            "description": "Specifies the maximum number of pages that can be processed by the scraper in parallel. The scraper automatically increases and decreases concurrency based on available system resources. This option enables you to set an upper limit, for example to reduce the load on a target web server.",
+            "minimum": 1,
+            "default": 50
+        },
+        "maxRequestRetries": {
+            "title": "Max request retries",
+            "type": "integer",
+            "description": "The maximum number of times the scraper will retry to load each web page on error, in case of a page load error or an exception thrown by the <b>Page function</b>.<br><br>If set to <code>0</code>, the page will be considered failed right after the first error.",
+            "minimum": 0,
+            "default": 3,
+            "unit": "retries"
+        },
+        "pageLoadTimeoutSecs": {
+            "title": "Page load timeout",
+            "type": "integer",
+            "description": "The maximum amount of time the scraper will wait for a web page to load, in seconds. If the web page does not load in this timeframe, it is considered to have failed and will be retried (subject to <b>Max page retries</b>), similarly as with other page load errors.",
+            "minimum": 1,
+            "default": 60,
+            "unit": "seconds"
+        },
+        "pageFunctionTimeoutSecs": {
+            "title": "Page function timeout",
+            "type": "integer",
+            "description": "The maximum amount of time the scraper will wait for the <b>Page function</b> to execute, in seconds. It is always a good idea to set this limit, to ensure that unexpected behavior in page function will not get the scraper stuck.",
+            "minimum": 1,
+            "default": 60,
+            "unit": "seconds"
+        },
+        "ignoreSslErrors": {
+            "title": "Ignore SSL errors",
+            "type": "boolean",
+            "description": "If enabled, the scraper will ignore SSL/TLS certificate errors. Use at your own risk.",
+            "default": false
+        },
+        "additionalMimeTypes": {
+            "title": "Additional MIME types",
+            "type": "array",
+            "description": "A JSON array specifying additional MIME content types of web pages to support. By default, Cheerio Scraper supports the <code>text/html</code> and <code>application/xhtml+xml</code> content types, and skips all other resources. For details, see <a href='https://apify.com/apify/cheerio-scraper#content-types' target='_blank' rel='noopener'>Content types</a> in README.",
+            "editor": "stringList",
+            "default": [],
+            "prefill": []
+        },
         "datasetName": {
             "title": "Dataset name",
             "type": "string",
@@ -78,6 +123,14 @@
             "type": "string",
             "description": "Name or ID of the key-value store that will be used for storing records. If left empty, the default key-value store of the run will be used.",
             "editor": "textfield"
+        },
+        "customData": {
+            "title": "Custom data",
+            "type": "object",
+            "description": "A custom JSON object that is passed to the <b>Page function</b> as <code>context.customData</code>. This setting is useful when invoking the scraper via API, in order to pass some arbitrary parameters to your code.",
+            "default": {},
+            "prefill": {},
+            "editor": "json"
         }
     },
     "required": []

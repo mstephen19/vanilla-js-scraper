@@ -11,15 +11,16 @@ class KVStore {
 
     async initialize(): Promise<void> {
         if (this.name) this.store = await Apify.openKeyValueStore(this.name);
-        if (!this.name) this.store = await Apify.openKeyValueStore('default');
     }
 
-    setValue(key: string, value: unknown): Promise<void> {
-        return this.store.setValue(key, value);
+    set(key: string, value: unknown): Promise<void> {
+        if (this.store) return this.store.setValue(key, value);
+        return Apify.setValue(key, value);
     }
 
-    getValue(key: string): unknown {
-        return this.store.getValue(key);
+    get(key: string): unknown {
+        if (this.store) return this.store.getValue(key);
+        return Apify.getValue(key);
     }
 }
 
