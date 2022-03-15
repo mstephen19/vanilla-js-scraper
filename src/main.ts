@@ -74,9 +74,12 @@ Apify.main(async () => {
             const { requestQueue: crawlerRq } = crawlerParam;
             const { userData } = request;
 
-            const { window } = new JSDOM(body, { url: request.url, contentType: response.headers['content-type'] || '', storageQuota: 1000 });
+            const toDom = $.html();
+
+            const { window } = new JSDOM(toDom, { url: request.url, contentType: response.headers['content-type'] || '', storageQuota: 1000 });
 
             const enqueueRequest = async (req: string | RequestOptions) => {
+                log.debug('Enqueueing...');
                 if (typeof request === 'string') {
                     return crawlerRq.addRequest({ url: req as string });
                 }
@@ -106,6 +109,7 @@ Apify.main(async () => {
                 if (!result) throw new Error('Must return an object from the pageFunction!');
 
                 if (pseudoUrls.length || linkSelector) {
+                    log.debug('Automatically enqueueing...');
                     await enqueueLinks({
                         $,
                         requestQueue,

@@ -1,7 +1,9 @@
 {
-	"name": "vanilla-js-scraper",
-	"version": "0.0",
-	"buildTag": "latest",
-	"env": null,
-	"template": "example_typescript"
+    "name": "vanilla-js-scraper",
+    "version": "0.0",
+    "buildTag": "latest",
+    "env": {
+        "APIFY_MEMORY_MBYTES": "1024"
+    },
+    "template": "example_typescript"
 }
