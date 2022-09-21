@@ -77,7 +77,7 @@ In the **[Page function](#page-function)**, **Pre-Navigation Hooks**, and **Post
 
 ## Input configuration
 
-As input, the Vanilla JS Scraper actor accepts a number of configurations. These can be entered either manually in the user interface in [Apify Console](https://console.apify.com), or programmatically in a JSON object using the [Apify API](https://apify.com/docs/api/v2#/reference/actors/run-collection/run-actor). For a complete list of input fields and their types, please visit the [Input](https://apify.com/apify/vanilla-js-scraper?section=input-schema) tab.
+As input, the Vanilla JS Scraper actor accepts a number of configurations. These can be entered either manually in the user interface in [Apify Console](https://console.apify.com), or programmatically in a JSON object using the [Apify API](https://apify.com/docs/api/v2#/reference/actors/run-collection/run-actor). For a complete list of input fields and their types, please visit the [Input](/mstephen190/vanilla-js-scraper/input-schema) tab.
 
 ### Start URLs
 
